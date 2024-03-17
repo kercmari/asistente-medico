@@ -260,4 +260,56 @@
    */
   new PureCounter();
 
+  const chatbox = document.querySelector(".chatbox");
+  const chatInput = document.querySelector(".chat-input textarea");
+
+  
+  const handleChat = () => {
+    userMessage = chatInput.value.trim(); // Get user entered message and remove extra whitespace
+    if(!userMessage) return;
+
+    // Clear the input textarea and set its height to default
+    chatInput.value = "";
+    chatInput.style.height = `${inputInitHeight}px`;
+
+    // Append the user's message to the chatbox
+    chatbox.appendChild(createChatLi(userMessage, "outgoing"));
+    chatbox.scrollTo(0, chatbox.scrollHeight);
+    
+    setTimeout(() => {
+        // Display "Thinking..." message while waiting for the response
+        const incomingChatLi = createChatLi("Thinking...", "incoming");
+        chatbox.appendChild(incomingChatLi);
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+        generateResponse(incomingChatLi);
+    }, 600);
+}
+
+  const chatbotToggler = document.querySelector(".chatbot-toggler");
+  const closeBtn = document.querySelector(".close-btn");
+  const sendChatBtn = document.querySelector(".chat-input span");
+
+  sendChatBtn.addEventListener("click", handleChat);
+  closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
+  chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+
+
+  window.addEventListener('scroll', function() {
+    var bottomContent = document.getElementById('bottomContent');
+    var contentRect = bottomContent.getBoundingClientRect();
+    var windowHeight = window.innerHeight;
+
+    if (contentRect.top <= windowHeight) {
+        document.body.classList.remove("show-chatbot")
+    } else {
+        // El usuario aún no ha llegado al contenido deseado
+        // Puedes realizar alguna acción de reversión si lo deseas
+        bottomContent.style.backgroundColor = '#ccc';
+    }
+});
+  
+
 })()
+
+
+
